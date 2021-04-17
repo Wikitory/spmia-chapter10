@@ -12,20 +12,19 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 
 import javax.servlet.Filter;
 
-
 @SpringBootApplication
 @EnableEurekaClient
 @EnableCircuitBreaker
 @EnableBinding(Source.class)
 @EnableResourceServer
 public class Application {
-    @Bean
-    public Filter userContextFilter() {
-        UserContextFilter userContextFilter = new UserContextFilter();
-        return userContextFilter;
-    }
+	@Bean
+	public Filter userContextFilter() {
+		UserContextFilter userContextFilter = new UserContextFilter();
+		return userContextFilter;
+	}
 
-    public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
-    }
+	public static void main(String[] args) {
+		SpringApplication.run(Application.class, args);
+	}
 }

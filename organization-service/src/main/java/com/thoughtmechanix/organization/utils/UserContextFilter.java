@@ -1,6 +1,5 @@
 package com.thoughtmechanix.organization.utils;
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -16,36 +15,35 @@ import java.io.IOException;
 
 @Component
 public class UserContextFilter implements Filter {
-    private static final Logger logger = LoggerFactory.getLogger(UserContextFilter.class);
+	private static final Logger logger = LoggerFactory.getLogger(UserContextFilter.class);
 
-    @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
+	@Override
+	public void init(FilterConfig filterConfig) throws ServletException {
 
-    }
+	}
 
-    @Override
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
-            throws IOException, ServletException {
+	@Override
+	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
+			throws IOException, ServletException {
 
-        logger.debug("Entering the UserContextFilter");
-        HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
-        String correlationId = httpServletRequest.getHeader(UserContext.CORRELATION_ID);
-        String userId = httpServletRequest.getHeader(UserContext.USER_ID);
-        String authToken = httpServletRequest.getHeader(UserContext.AUTH_TOKEN);
-        String orgId = httpServletRequest.getHeader(UserContext.ORG_ID);
+		logger.debug("Entering the UserContextFilter");
+		HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
+		String correlationId = httpServletRequest.getHeader(UserContext.CORRELATION_ID);
+		String userId = httpServletRequest.getHeader(UserContext.USER_ID);
+		String authToken = httpServletRequest.getHeader(UserContext.AUTH_TOKEN);
+		String orgId = httpServletRequest.getHeader(UserContext.ORG_ID);
 
+		UserContext.setCorrelationId(correlationId);
+		UserContext.setUserId(userId);
+		UserContext.setAuthToken(authToken);
+		UserContext.setOrgId(orgId);
 
-        UserContext.setCorrelationId(correlationId);
-        UserContext.setUserId(userId);
-        UserContext.setAuthToken(authToken);
-        UserContext.setOrgId(orgId);
+		logger.debug("Exiting the UserContextFilter");
+		filterChain.doFilter(httpServletRequest, servletResponse);
+	}
 
-        logger.debug("Exiting the UserContextFilter");
-        filterChain.doFilter(httpServletRequest, servletResponse);
-    }
+	@Override
+	public void destroy() {
 
-    @Override
-    public void destroy() {
-
-    }
+	}
 }

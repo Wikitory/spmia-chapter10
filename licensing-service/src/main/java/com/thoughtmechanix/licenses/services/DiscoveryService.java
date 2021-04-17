@@ -1,6 +1,5 @@
 package com.thoughtmechanix.licenses.services;
 
-
 import com.thoughtmechanix.licenses.model.Organization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
@@ -16,24 +15,22 @@ import java.util.Random;
 
 @Service
 public class DiscoveryService {
-    @Autowired
-    RestTemplate restTemplate;
+	@Autowired
+	RestTemplate restTemplate;
 
-    @Autowired
-    private DiscoveryClient discoveryClient;
+	@Autowired
+	private DiscoveryClient discoveryClient;
 
-    public List getEurekaServices(){
-       List<String> services = new ArrayList<String>();
+	public List getEurekaServices() {
+		List<String> services = new ArrayList<String>();
 
-        discoveryClient.getServices().forEach(serviceName -> {
-            discoveryClient.getInstances(serviceName).forEach(instance->{
-                services.add( String.format("%s:%s",serviceName,instance.getUri()));
-            });
-        });
+		discoveryClient.getServices().forEach(serviceName -> {
+			discoveryClient.getInstances(serviceName).forEach(instance -> {
+				services.add(String.format("%s:%s", serviceName, instance.getUri()));
+			});
+		});
 
-        return services;
-    }
-
-
+		return services;
+	}
 
 }

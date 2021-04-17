@@ -10,31 +10,31 @@ import java.util.UUID;
 
 @Service
 public class OrganizationService {
-    @Autowired
-    private OrganizationRepository orgRepository;
+	@Autowired
+	private OrganizationRepository orgRepository;
 
-    @Autowired
-    SimpleSourceBean simpleSourceBean;
+	@Autowired
+	SimpleSourceBean simpleSourceBean;
 
-    public Organization getOrg(String organizationId) {
-        return orgRepository.findById(organizationId);
-    }
+	public Organization getOrg(String organizationId) {
+		return orgRepository.findByOrganization(organizationId);
+	}
 
-    public void saveOrg(Organization org){
-        org.setId( UUID.randomUUID().toString());
+	public void saveOrg(Organization org) {
+		org.setOrganizationId(UUID.randomUUID().toString());
 
-        orgRepository.save(org);
-        simpleSourceBean.publishOrgChange("SAVE", org.getId());
-    }
+		orgRepository.save(org);
+		simpleSourceBean.publishOrgChange("SAVE", org.getOrganizationId());
+	}
 
-    public void updateOrg(Organization org){
-        orgRepository.save(org);
-        simpleSourceBean.publishOrgChange("UPDATE", org.getId());
+	public void updateOrg(Organization org) {
+		orgRepository.save(org);
+		simpleSourceBean.publishOrgChange("UPDATE", org.getOrganizationId());
 
-    }
+	}
 
-    public void deleteOrg(Organization org){
-        orgRepository.delete( org.getId());
-        simpleSourceBean.publishOrgChange("DELETE", org.getId());
-    }
+	public void deleteOrg(Organization org) {
+		orgRepository.delete(org);
+		simpleSourceBean.publishOrgChange("DELETE", org.getOrganizationId());
+	}
 }

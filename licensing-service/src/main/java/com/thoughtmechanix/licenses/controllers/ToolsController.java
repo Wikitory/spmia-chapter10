@@ -9,14 +9,14 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping(value="v1/tools")
+@RequestMapping(value = "v1/tools")
 public class ToolsController {
-    @Autowired
-    private DiscoveryService discoveryService;
+	@Autowired
+	private DiscoveryService discoveryService;
 
-    @RequestMapping(value="/eureka/services",method = RequestMethod.GET)
-    public List<String> getEurekaServices() {
+	@RequestMapping(value = "/eureka/services", method = RequestMethod.GET)
+	public List<String> getEurekaServices() {
 
-        return discoveryService.getEurekaServices();
-    }
+		return discoveryService.getEurekaServices();
+	}
 }

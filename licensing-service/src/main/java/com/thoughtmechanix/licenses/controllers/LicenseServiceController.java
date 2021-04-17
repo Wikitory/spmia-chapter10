@@ -18,46 +18,46 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
-@RequestMapping(value="v1/organizations/{organizationId}/licenses")
+@RequestMapping(value = "v1/organizations/{organizationId}/licenses")
 public class LicenseServiceController {
-    @Autowired
-    private LicenseService licenseService;
+	@Autowired
+	private LicenseService licenseService;
 
-    @Autowired
-    private ServiceConfig serviceConfig;
+	@Autowired
+	private ServiceConfig serviceConfig;
 
-    @Autowired
-    private HttpServletRequest request;
+	@Autowired
+	private HttpServletRequest request;
 
-    private static final Logger logger = LoggerFactory.getLogger(LicenseServiceController.class);
+	private static final Logger logger = LoggerFactory.getLogger(LicenseServiceController.class);
 
+	@RequestMapping(value = "/", method = RequestMethod.GET)
+	public List<License> getLicenses(@PathVariable("organizationId") String organizationId) {
 
-    @RequestMapping(value="/",method = RequestMethod.GET)
-    public List<License> getLicenses( @PathVariable("organizationId") String organizationId) {
+		return licenseService.getLicensesByOrg(organizationId);
+	}
 
-        return licenseService.getLicensesByOrg(organizationId);
-    }
+	@RequestMapping(value = "/{licenseId}", method = RequestMethod.GET)
+	public License getLicenses(@PathVariable("organizationId") String organizationId,
+			@PathVariable("licenseId") String licenseId) {
+		logger.debug("Found tmx-correlation-id in license-service-controller: {} ",
+				request.getHeader("tmx-correlation-id"));
+		return licenseService.getLicense(organizationId, licenseId);
+	}
 
-    @RequestMapping(value="/{licenseId}",method = RequestMethod.GET)
-    public License getLicenses( @PathVariable("organizationId") String organizationId,
-                                @PathVariable("licenseId") String licenseId) {
-        logger.debug("Found tmx-correlation-id in license-service-controller: {} ", request.getHeader("tmx-correlation-id"));
-        return licenseService.getLicense(organizationId, licenseId);
-    }
+	@RequestMapping(value = "{licenseId}", method = RequestMethod.PUT)
+	public void updateLicenses(@PathVariable("licenseId") String licenseId, @RequestBody License license) {
+		licenseService.updateLicense(license);
+	}
 
-    @RequestMapping(value="{licenseId}",method = RequestMethod.PUT)
-    public void updateLicenses( @PathVariable("licenseId") String licenseId, @RequestBody License license) {
-        licenseService.updateLicense(license);
-    }
+	@RequestMapping(value = "/", method = RequestMethod.POST)
+	public void saveLicenses(@RequestBody License license) {
+		licenseService.saveLicense(license);
+	}
 
-    @RequestMapping(value="/",method = RequestMethod.POST)
-    public void saveLicenses(@RequestBody License license) {
-        licenseService.saveLicense(license);
-    }
-
-    @RequestMapping(value="{licenseId}",method = RequestMethod.DELETE)
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteLicenses( @PathVariable("licenseId") String licenseId, @RequestBody License license) {
-         licenseService.deleteLicense(license);
-    }
+	@RequestMapping(value = "{licenseId}", method = RequestMethod.DELETE)
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void deleteLicenses(@PathVariable("licenseId") String licenseId, @RequestBody License license) {
+		licenseService.deleteLicense(license);
+	}
 }
